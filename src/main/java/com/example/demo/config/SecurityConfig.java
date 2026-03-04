@@ -116,6 +116,8 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 
                     .requestMatchers("/api/admin/orders/**").hasRole("ADMIN") // Cho phép Admin truy cập controller mới
                     .requestMatchers("/api/users/**").hasRole("ADMIN")
+
+                    .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
                     .requestMatchers("/api/posts/**").hasRole("ADMIN")
 
                     // Quy tắc của ADMIN cho Orders phải nằm SAU quy tắc của User
