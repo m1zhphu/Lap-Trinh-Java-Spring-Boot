@@ -78,6 +78,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
             .csrf(csrf -> csrf.disable()) // Tắt CSRF
             .authorizeHttpRequests(auth -> auth
 
+                    .requestMatchers("/api/health").permitAll()
                     // === 1. QUY TẮC CÔNG KHAI (permitAll) ===
                     // (Giữ nguyên)
                     .requestMatchers("/api/auth/**").permitAll()
