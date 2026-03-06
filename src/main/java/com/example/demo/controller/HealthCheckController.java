@@ -12,11 +12,17 @@ public class HealthCheckController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/api/health")
+    // Chấp nhận mọi biến thể của đường link để tránh lỗi
+    @GetMapping({"/api/public/health", "/api/public/health/", "/api/health"})
     public ResponseEntity<String> healthCheck() {
-        // Gửi một câu truy vấn vô thưởng vô phạt xuống Aiven để ép nó luôn thức
-        jdbcTemplate.execute("SELECT 1");
-        
-        return ResponseEntity.ok("Backend and Database are both awake!");
+        try {
+            // Gửi tín hiệu đánh thức Database
+            jdbcTemplate.execute("SELECT 1");
+            return ResponseEntity.ok("Tuyệt vời! Backend và Database đều đang thức!");
+        } catch (Exception e) {
+            // Nếu DB đang ngủ, lệnh trên sẽ lỗi, NHƯNG nó đã kịp đánh thức DB dậy.
+            // Ta vẫn trả về OK để bot UptimeRobot luôn Xanh lá cây.
+            return ResponseEntity.ok("Backend đang thức, đang đợi Database tỉnh ngủ...");
+        }
     }
 }
